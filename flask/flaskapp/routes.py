@@ -1,5 +1,5 @@
 import os
-# import secrets
+from base64 import b64encode
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
@@ -44,8 +44,9 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.user.data).first()
-        passwprd = User.query.filter_by(password = form.password.data)
-        if user and passwprd:
+
+
+        if user and user.password == form.password.data:
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
@@ -94,14 +95,34 @@ def profile():
     return render_template('profile.html', title='Profile',
                            image_file=image_file, form=form)
 
+def save_post_img(image):
+
+    # random_hex = secrets.token_hex(8)
+    # _, f_ext = os.path.splitext(form_picture.filename)
+    # picture_fn = random_hex + f_ext
+    post_img_path = os.path.join(app.root_path, 'static/post_imgs', image.filename)
+
+    img_size = (500, 500)
+    i = Image.open(image)
+    i.thumbnail(img_size)
+    i.save(post_img_path)
+
+    return image.filename
+
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        if form.post_image.data:
+            post_img = save_post_img(form.post_image.data)
+            # current_user.post_image = post_img
+        else:
+            post_img = None
+
         # post = form.post_type.data
-        post = Post(title=form.title.data, content=form.content.data, post_type=form.post_type.data, author=current_user)
+        post = Post(content=form.content.data,post_image = post_img, post_type=form.post_type.data,author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
@@ -113,7 +134,7 @@ def new_post():
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post.html', post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -124,24 +145,28 @@ def update_post(post_id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
-        post.title = form.title.data
+        if form.post_image.data:
+            post.post_image = save_post_img(form.post_image.data)
         post.content = form.content.data
+        post.post_type = form.post_type.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
     # elif request.method == 'GET':
-    form.title.data = post.title
+    form.post_image.data = post.post_image
     form.content.data = post.content
+    form.post_type.data = post.post_type
     return render_template('create_post.html', title='Update Post',
                            form=form, legend='Update Post')
 
 
-@app.route("/post/<int:post_id>/delete", methods=['POST'])
+@app.route("/post/<int:post_id>/delete", methods=['GET', 'POST'])
 @login_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
-        abort(403)
+        # abort(403)
+        redirect(url_for('about'))
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
