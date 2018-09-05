@@ -15,6 +15,8 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+    # follo = db.relationship('Follow', backref='foll', lazy=True)
+
 
     def __repr__(self):
         return "User('{self.username}', '{self.email}', '{self.image_file}')"
@@ -31,3 +33,15 @@ class Post(db.Model):
 
     def __repr__(self):
         return "Post('{self.title}', '{self.date_posted}')"
+
+class Follow(db.Model):
+
+
+    follower = db.Column(db.Integer, primary_key=True,nullable=False)
+    following = db.Column(db.Integer, primary_key=True,nullable=False)
+
+    # follower = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, primary_key=True)
+    # following = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, primary_key= True)
+
+    def __repr__(self):
+        return "Follow('{self.follower}', '{self.following}')"

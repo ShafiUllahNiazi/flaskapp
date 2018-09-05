@@ -2,9 +2,9 @@ import os
 from base64 import b64encode
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from flaskapp import app, db, bcrypt
+from flaskapp import app, db
 from flaskapp.forms import SignupFoem, LoginForm, UpdateProfileForm, PostForm
-from flaskapp.models import User, Post
+from flaskapp.models import User, Post, Follow
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -151,7 +151,7 @@ def update_post(post_id):
         post.post_type = form.post_type.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
-        return redirect(url_for('post', post_id=post.id))
+        return redirect(url_for('home', post_id=post.id))
     # elif request.method == 'GET':
     form.post_image.data = post.post_image
     form.content.data = post.content
@@ -165,9 +165,54 @@ def update_post(post_id):
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
-        # abort(403)
-        redirect(url_for('about'))
+        abort(403)
+        # redirect(url_for('about'))
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('home'))
+
+
+@app.route("/allusers")
+@login_required
+def all_users():
+    users = User.query.order_by(User.username).all()
+
+    return render_template('all_users.html', title='Users',
+                           users=users, legend='All Users')
+
+@app.route("/user/<int:user_id>")
+@login_required
+def user(user_id):
+
+    user = User.query.get_or_404(user_id)
+    posts = Post.query.all()
+    # followings = Follow.query.all()
+    following = Follow.query.filter_by(following =user_id).first()
+    return render_template('user.html', user=user, posts=posts, following=following)
+
+
+
+@app.route("/user/<int:user_id>/follow", methods=['GET', 'POST'])
+@login_required
+def follow(user_id):
+    user = User.query.get_or_404(user_id)
+
+
+
+    db.session.add(Follow(follower = current_user.id,following = user.id))
+    db.session.commit()
+    return redirect(url_for('user', user_id=user_id))
+    # return redirect(url_for('user'))
+
+@app.route("/user/<int:user_id>/unfollow", methods=['GET', 'POST'])
+@login_required
+def unfollow(user_id):
+    user = User.query.get_or_404(user_id)
+
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('user', user_id=user_id))
+
+
+

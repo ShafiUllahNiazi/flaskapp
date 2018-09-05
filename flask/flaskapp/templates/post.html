@@ -1,23 +1,87 @@
 {% extends "layout.html" %}
 {% block content %}
-  <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="#">{{ post.author.username }}</a>
-        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-        {% if post.author == current_user %}
-          <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
 
-            <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
-          </div>
-        {% endif %}
-      </div>
+{#    hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#}
 
-      <p class="article-content">{{ post.content }}</p>
-    <img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+
+                <div class="col-sm-12">
+                    <div class="row ">
+                        <div class="col-sm-2">
+                            <img class="rounded-circle col-sm-10" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+
+                        </div>
+                        <div class="col-sm-8">
+
+
+
+
+                            <a href="#">{{ post.author.username }}</a><br>
+                            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+
+{#                            {% if post.author == current_user %}#}
+{#                              <div>#}
+{#                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>#}
+{##}
+{#                                <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>#}
+{#                              </div>#}
+{#                            {% endif %}#}
+
+
+                        </div>
+                        <div class="col-sm-2">
+                            {% if post.author == current_user %}
+                              <div>
+                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+
+                                <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+                              </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12  mb-5">
+
+
+
+                    <p>{{ post.content }}</p>
+                    <img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}" class="img-fluid"
+                         style="object-fit: cover">
+                </div>
+
+        </div>
     </div>
-  </article>
+
+
+
+
+
+
+
+
+
+{#    jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj#}
+
+{#  <article class="media content-section">#}
+{#    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">#}
+{#    <div class="media-body">#}
+{#      <div class="article-metadata">#}
+{#        <a class="mr-2" href="#">{{ post.author.username }}</a>#}
+{#        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>#}
+{#        {% if post.author == current_user %}#}
+{#          <div>#}
+{#            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>#}
+{##}
+{#            <a class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>#}
+{#          </div>#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <p class="article-content">{{ post.content }}</p>#}
+{#    <img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}">#}
+{#    </div>#}
+{#  </article>#}
 
 {% endblock content %}

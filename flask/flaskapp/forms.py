@@ -38,7 +38,7 @@ class LoginForm(FlaskForm):
 class UpdateProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    picture = FileField('Update your profile picture', validators=[FileAllowed(['jpg', 'png'])])
+    picture = FileField('Update your profile picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update_profile')
 
     def validate_username(self, username):
@@ -60,3 +60,4 @@ class PostForm(FlaskForm):
     post_image = FileField('post image', validators=[FileAllowed(['jpg', 'png'])])
     post_type = SelectField('post_type', choices=[('public', 'public'), ('private', 'private'), ('protected', 'protected')])
     submit = SubmitField('Post')
+
