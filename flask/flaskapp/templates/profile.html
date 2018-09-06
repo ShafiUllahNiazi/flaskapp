@@ -1,97 +1,106 @@
-{% extends "layout.html" %}
-    {% block content %}
+{#{% extends "layout.html" %}#}
+{% extends "all_posts.html" %}
+{% block content2 %}
 
-        <div class="row">
+    <div class="row">
 
 
+        <div class="col-md-2"></div>
+        <div class="row col-md-6">
 
-    <div class="row col-md-6">
-
-      <div class="row container" style="margin-left: 5%">
-        <div class="col-md-3">
-            <img class="col-md-12" src="{{ image_file }}">
-        </div>
-        <div class="col-md-6">
-          <h2>{{ current_user.username }}</h2>
-          <p>{{ current_user.email }}</p>
-
-        </div>
-      </div>
-
-<div class="container" style="margin-left:5% ; padding-top: 20px" >
-    <form method="POST" action="" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-
-                <h3>User Info</h3>
-                <div class="form-group">
-                    {{ form.username.label }}
-
-                    {% if form.username.errors %}
-                        {{ form.username(class="form-control") }}
-                        <div >
-                            {% for error in form.username.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.username(class="form-control") }}
-                    {% endif %}
+            <div class="row container" style="margin-left: 5%">
+                <div class="col-md-3">
+                    <img class="col-md-12" src="{{ image_file }}">
                 </div>
-                <div class="form-group">
-                    {{ form.email.label }}
-                    {% if form.email.errors %}
-                        {{ form.email }}
-                        <div>
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.picture.label() }}
-                    {{ form.picture}}
-                    {% if form.picture.errors %}
-                        {% for error in form.picture.errors %}
-                            <span>{{ error }}</span></br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                <div class="col-md-6">
+                    <h2>{{ current_user.username }}</h2>
+                    <p>{{ current_user.email }}</p>
 
-            <div>
-                {{ form.submit}}
+                </div>
             </div>
-        </form>
+
+            <div class="container" style="margin-left:5% ; padding-top: 20px">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <h3>User Info</h3>
+                    <div class="form-group">
+                        {{ form.username.label }}
+
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control") }}
+                            <div>
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label }}
+                        {% if form.email.errors %}
+                            {{ form.email }}
+                            <div>
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span>{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        {{ form.submit }}
+                    </div>
+                </form>
 
 
-</div>
+            </div>
+
+
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+
+
+            <h3>Activities</h3>
+
+            <ul style="list-style-type:none">
+                <li>
+                    <a href="{{ url_for('new_post') }}">Create Post</a>
+                </li>
+                <li><a href="{{ url_for('all_users') }}">All Users</a></li>
+                <li>Calendars</li>
+                <li>etc</li>
+            </ul>
+
+
+        </div>
+
+
+
+    {% block all_posts %}{% endblock all_posts %}
+
+
+
+
 
 
 
     </div>
-            <div class="col-md-2"></div>
-         <div class="col-md-4">
-
-
-
-                <h3>Activities</h3>
-
-                <ul style="list-style-type:none">
-                    <li>
-                        <a href="{{ url_for('new_post') }}">Create Post</a>
-                    </li>
-                    <li><a href="{{ url_for('all_users') }}">All Users</a></li>
-                    <li>Calendars</li>
-                    <li >etc</li>
-                </ul>
-
-
-
-         </div>
-</div>
-{% endblock content %}
+{% endblock %}
 
 
 

@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db
 from flaskapp.forms import SignupFoem, LoginForm, UpdateProfileForm, PostForm
-from flaskapp.models import User, Post, Follow
+from flaskapp.models import User, Post,followers
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -43,6 +43,7 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
+
         user = User.query.filter_by(username=form.user.data).first()
 
 
@@ -78,6 +79,7 @@ def save_picture(image):
 @app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
+    posts = Post.query.all()
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -93,7 +95,7 @@ def profile():
     form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('profile.html', title='Profile',
-                           image_file=image_file, form=form)
+                           image_file=image_file, form=form, posts=posts)
 
 def save_post_img(image):
 
@@ -188,7 +190,15 @@ def user(user_id):
     user = User.query.get_or_404(user_id)
     posts = Post.query.all()
     # followings = Follow.query.all()
-    following = Follow.query.filter_by(following =user_id).first()
+    # following = Follow.query.get_or_404(filter(Follow.follower == current_user.id,Follow.following==user_id))
+    following = User.is_following(current_user,user)
+    # if following:
+    #     print("ddddddddddddddddddddddddddd\n\n\n\n\n\n")
+    #     print(db.session.query(followers).filter_by(follower_id = 2).one()
+
+# )
+    # else:
+    #     return redirect(url_for('about4'))
     return render_template('user.html', user=user, posts=posts, following=following)
 
 
@@ -196,22 +206,40 @@ def user(user_id):
 @app.route("/user/<int:user_id>/follow", methods=['GET', 'POST'])
 @login_required
 def follow(user_id):
-    user = User.query.get_or_404(user_id)
-
-
-
-    db.session.add(Follow(follower = current_user.id,following = user.id))
+    user2 = User.query.get_or_404(user_id)
+    #
+    # # statement = followw.insert().values(follower=current_user.id, following=user.id)
+    # # db.session.execute(statement)
+    # # db.session.commit()
+    # # follower = current_user.id,
+    #
+    # db.session.add(Follow(following = user.id,ff=current_user))
+    # db.session.commit()
+    current_user.followed.append(user2)
     db.session.commit()
+    # a= followers(follower_id= current_user,followed_id=user2)
+    # db.session.add(a)
+    # db.session.commit()
+
+    # User.follow(current_user,user2)
+
+
     return redirect(url_for('user', user_id=user_id))
     # return redirect(url_for('user'))
 
 @app.route("/user/<int:user_id>/unfollow", methods=['GET', 'POST'])
 @login_required
 def unfollow(user_id):
-    user = User.query.get_or_404(user_id)
-
-    db.session.delete(user)
+    # user = Follow.filter((Follow.follower == current_user,Follow.following==user_id))
+    #
+    # db.session.delete(user)
+    # db.session.commit()
+    user2 = User.query.get_or_404(user_id)
+    # User.unfollow(current_user,user2)
+    current_user.followed.remove(user2)
     db.session.commit()
+
+
     return redirect(url_for('user', user_id=user_id))
 
 
