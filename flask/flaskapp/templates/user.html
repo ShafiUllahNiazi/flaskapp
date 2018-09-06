@@ -1,7 +1,7 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "all_posts.html" %}
+{% block content2 %}
     <div class="row">
-
+<div class="col-md-2"></div>
         <div class="col-md-6">
 
 
@@ -21,48 +21,13 @@
                         <a class="btn btn-info btn-sm mt-1 mb-1" href="{{ url_for('unfollow', user_id=user.id) }}">Unfollow</a>
                      {% else %}
                         <a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{{ url_for('follow', user_id=user.id) }}">Follow</a>
-{#                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('follow', user_id=user.id) }}">Update</a>#}
+
                     {% endif %}
                 {% endif %}
 
                 </div>
 
 
-
-
-
-
-
-
-            {% for post in posts %}
-                <div class="col-sm-12">
-                    <div class="row ">
-                        <div class="col-sm-2">
-                            <img class="rounded-circle col-sm-10"
-                                 src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-                        </div>
-                        <div class="col-sm-8">
-                            <a href="{{ url_for('profile') }}">{{ post.author.username }}</a><br>
-                            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-                        </div>
-                        <div class="col-sm-2">
-{#                         {% if post.author == current_user %}#}
-                            {% if current_user == user.username %}
-                            <a href="{{ url_for('post', post_id=post.id) }}">Edit</a>
-                            {% endif %}
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12  mb-5">
-                    <p>{{ post.content }}</p>
-
-                {% if post.post_image %}
-                <img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}" class="img-fluid"
-                         style="object-fit: cover">
-                {% endif %}
-                </div>
-            {% endfor %}
 
         </div>
 

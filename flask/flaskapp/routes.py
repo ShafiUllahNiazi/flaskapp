@@ -12,7 +12,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 @login_required
 def home():
-    posts = Post.query.all()
+    # posts = Post.query.all()
+    posts = Post.query.filter_by(post_type='public').all()
+    # from sqlalchemy import or_
+    #
+    # posts = db.query.filter(or_(Post.post_type == 'public', Post.post_type == 'private'))
+
     return render_template('home.html', posts=posts)
 
 
@@ -80,6 +85,27 @@ def save_picture(image):
 @login_required
 def profile():
     posts = Post.query.all()
+
+    # form = UpdateProfileForm()
+    # if form.validate_on_submit():
+    #     if form.picture.data:
+    #         picture_file = save_picture(form.picture.data)
+    #         current_user.image_file = picture_file
+    #     current_user.username = form.username.data
+    #     current_user.email = form.email.data
+    #     db.session.commit()
+    #     flash('Profile updated!', 'success')
+    #     return redirect(url_for('profile'))
+    # # elif request.method == 'GET':
+    # form.username.data = current_user.username
+    # form.email.data = current_user.email
+    # image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('profile.html', title='Profile',user=current_user, posts=posts)
+
+
+@app.route("/profile/edit_profile", methods=['GET', 'POST'])
+@login_required
+def edit_profile():
     form = UpdateProfileForm()
     if form.validate_on_submit():
         if form.picture.data:
@@ -88,14 +114,15 @@ def profile():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Profile updated!', 'success')
         return redirect(url_for('profile'))
     # elif request.method == 'GET':
     form.username.data = current_user.username
     form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile',
-                           image_file=image_file, form=form, posts=posts)
+    return render_template('edit_profile.html', title='Profile',
+                           image_file=image_file, form=form,user=current_user)
+
+
 
 def save_post_img(image):
 
