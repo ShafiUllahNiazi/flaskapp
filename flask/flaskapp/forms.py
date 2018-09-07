@@ -61,3 +61,6 @@ class PostForm(FlaskForm):
     post_type = SelectField('post_type', choices=[('public', 'public'), ('private', 'private'), ('protected', 'protected')])
     submit = SubmitField('Post')
 
+
+
+

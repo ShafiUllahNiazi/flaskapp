@@ -1,5 +1,5 @@
 import os
-from base64 import b64encode
+from sqlalchemy import and_, or_
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db
@@ -13,11 +13,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 @login_required
 def home():
     # posts = Post.query.all()
-    posts = Post.query.filter_by(post_type='public').all()
-    # from sqlalchemy import or_
-    #
-    # posts = db.query.filter(or_(Post.post_type == 'public', Post.post_type == 'private'))
-
+    posts = Post.query.filter_by(post_type ='public').all()
     return render_template('home.html', posts=posts)
 
 
@@ -84,23 +80,24 @@ def save_picture(image):
 @app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
-    posts = Post.query.all()
+    posts = Post.query.filter_by(user_id = current_user.id).all()
 
-    # form = UpdateProfileForm()
-    # if form.validate_on_submit():
-    #     if form.picture.data:
-    #         picture_file = save_picture(form.picture.data)
-    #         current_user.image_file = picture_file
-    #     current_user.username = form.username.data
-    #     current_user.email = form.email.data
-    #     db.session.commit()
-    #     flash('Profile updated!', 'success')
-    #     return redirect(url_for('profile'))
-    # # elif request.method == 'GET':
-    # form.username.data = current_user.username
-    # form.email.data = current_user.email
-    # image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html', title='Profile',user=current_user, posts=posts)
+    form = PostForm()
+    if form.validate_on_submit():
+        if form.post_image.data:
+            post_img = save_post_img(form.post_image.data)
+            # current_user.post_image = post_img
+        else:
+            post_img = None
+
+        # post = form.post_type.data
+        post = Post(content=form.content.data, post_image=post_img, post_type=form.post_type.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('profile.html', title='Profile', form = form,user=current_user, posts=posts)
 
 
 @app.route("/profile/edit_profile", methods=['GET', 'POST'])
@@ -215,13 +212,19 @@ def all_users():
 def user(user_id):
 
     user = User.query.get_or_404(user_id)
-    posts = Post.query.all()
+    posts = []
     # followings = Follow.query.all()
     # following = Follow.query.get_or_404(filter(Follow.follower == current_user.id,Follow.following==user_id))
     following = User.is_following(current_user,user)
-    # if following:
-    #     print("ddddddddddddddddddddddddddd\n\n\n\n\n\n")
-    #     print(db.session.query(followers).filter_by(follower_id = 2).one()
+    # posts = Post.query.filter_by(user_id=current_user.id).all()
+    print("follllllll")
+    print(following)
+    # posts = db.session.query(Post).filter(or_(
+    #     Post.post_type == 'public', Post.post_type == 'protected')).all()
+    print(posts)
+    if following:
+        posts = db.session.query(Post).filter(and_(Post.user_id == user.id,(or_(
+            Post.post_type == 'public', Post.post_type == 'private'))))
 
 # )
     # else:
