@@ -1,50 +1,44 @@
 {% extends "layout.html" %}
 {% block content %}
-{% block content2 %}{% endblock %}
+    {% block content2 %}{% endblock %}
     <div class="row bg-light">
         <div class="col-md-3"></div>
         <div class="col-md-5">
             {% for post in posts %}
-                <div class="bg-white mb-lg-5 p-lg-5">
-                <div class="col-sm-12">
-                    <div class="row border-info">
-                        <div class="col-sm-3">
-                            <img class="rounded-circle col-sm-12"
-                                 src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-                        </div>
-                        <div class="col-sm-7">
-                            <a href="{{ url_for('user', user_id=post.author.id) }}">{{ post.author.username }}</a><br>
-                            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-                        </div>
-                        <div class="col-sm-2">
-                            {% if post.author == current_user %}
-                                <a href="{{ url_for('post', post_id=post.id) }}">Edit</a>
-                            {% endif %}
+                <div class="shadow-lg bg-transparent p-4 mb-4 ">
+                    <div class="col-sm-12">
+                        <div class="row border-info">
+                            <div class="col-sm-3">
+                                <img class="rounded-circle col-sm-12"
+                                     src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+                            </div>
+                            <div class="col-sm-7">
+                                <a href="{{ url_for('user', user_id=post.author.id) }}">{{ post.author.username }}</a><br>
 
+                                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                                <br>
+                                <small class="text-muted">{{ post.date_posted.strftime('%H:%M:%S') }}</small>
+                            </div>
+                            <div class="col-sm-2">
+                                {% if post.author == current_user %}
+                                    <a href="{{ url_for('post', post_id=post.id) }}">Edit</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12  mb-5">
-                    <p>{{ post.content }}</p>
-
-                    {% if post.post_image %}
-                        <img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}" class="img-fluid img-thumbnail"
-                             style="object-fit: cover">
-                    {% endif %}
-                </div>
-
-
+                    <div class="col-md-12  mb-3 mt-5">
+                        <p>{{ post.content }}</p>
+                    </div>
+                    <div class="col-md-12  mb-5">
+                        {% if post.post_image %}
+                            <center><img src="{{ url_for('static', filename='post_imgs/' + post.post_image) }}"
+                                         class="img-fluid img-thumbnail"
+                                         style="object-fit: cover; background-color: #555; width: 100%; max-width: 500px; height: auto;">
+                            </center>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 {% endblock %}

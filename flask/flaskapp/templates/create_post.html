@@ -12,11 +12,9 @@
                 </div>
                 <div >
                      {{ form.post_image }}
-{#                    {{ form.post_image (class="custom-file-input") }}#}
-{#                    {{ form.post_image.label (class="custom-file-label") }}#}
                 </div>
                 <div class="form-group">
-
+                    <p> {{ form.post_type.label }} </p>
                     {{ form.post_type (class="custom-select") }}
                 </div>
                 <div class="form-group">

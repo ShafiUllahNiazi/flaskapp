@@ -1,100 +1,31 @@
-{#{% extends "layout.html" %}#}
 {% extends "all_posts.html" %}
 {% block content2 %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="row">
-
-
-        <div class="col-md-3"></div>
-        <div class="row col-md-5">
-
-            <div class="row container">
-                <div class="col-md-3">
-                    <img class="col-md-12" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
-                </div>
-                <div class="col-md-6">
-                    <h2>{{ user.username }}</h2>
-                    <p>{{ user.email }}</p>
-
-                </div>
+    <div class="row bg-light">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <div class="col-md-3">
+                <img class="col-md-12" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
             </div>
-
-            <div class="row container">
-
-                <a class="btn btn-info btn-sm mt-1 mb-1" href="{{ url_for('edit_profile', user_id=user.id) }}">Edit Profile</a>
+            <div class="col-md-6">
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.email }}</p>
             </div>
-
-{#            <div class="container" style="padding-top: 30px; padding-bottom: 30px">#}
-{#                <form method="POST" action="" enctype="multipart/form-data">#}
-{#                    {{ form.hidden_tag() }}#}
-{##}
-{#                    <h3>User Info</h3>#}
-{#                    <div class="form-group">#}
-{#                        {{ form.username.label }}#}
-{##}
-{##}
-{#                            {{ form.username(class="form-control") }}#}
-{##}
-{#                    </div>#}
-{#                    <div class="form-group">#}
-{#                        {{ form.email.label }}#}
-{##}
-{#                            {{ form.email(class="form-control") }}#}
-{##}
-{#                    </div>#}
-{#                    <div class="form-group">#}
-{#                        {{ form.picture.label() }}#}
-{#                        {{ form.picture }}#}
-{##}
-{#                    </div>#}
-{##}
-{#                    <div>#}
-{#                        {{ form.submit }}#}
-{#                    </div>#}
-{#                </form>#}
-{##}
-{##}
-{#            </div>#}
-
-
+            <div class="col-md-3">
+                <a class="btn btn-info btn-sm mt-1 mb-1" href="{{ url_for('edit_profile', user_id=user.id) }}">Edit
+                    Profile</a>
+            </div>
         </div>
         <div class="col-md-2"></div>
-        <div class="col-md-2">
-
-
-
+        <div class="col-md-2 bg-transparent">
             <h3>Activities</h3>
-
             <ul style="list-style-type:none">
-                <li>
-                    <a href="{{ url_for('new_post') }}">Create Post</a>
-                </li>
-                <li><a href="{{ url_for('all_users') }}">All Users</a></li>
-                <li>Calendars</li>
-                <li>etc</li>
+                <li><a href="{{ url_for('new_post') }}">Create Post</a></li>
+                <li><a href="{{ url_for('all_users') }}">Users</a></li>
+                <li><a href="{{ url_for('followings') }}">Followings</a></li>
             </ul>
-
-
         </div>
-
-
-
         <div class="col-sm-3"></div>
-        <div class="col-sm-5">
+        <div class="col-sm-5 mt-5 mb-5 bg-transparent">
             <legend> {{ legend }}  </legend>
             <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
@@ -102,10 +33,8 @@
                     {{ form.content.label }}
                     {{ form.content(class="form-control form-control-lg") }}
                 </div>
-                <div >
-                     {{ form.post_image }}
-{#                    {{ form.post_image (class="custom-file-input") }}#}
-{#                    {{ form.post_image.label (class="custom-file-label") }}#}
+                <div>
+                    {{ form.post_image }}
                 </div>
                 <div class="form-group">
 
@@ -116,18 +45,7 @@
                 </div>
             </form>
         </div>
-
-
-
-
-    {% block all_posts %}{% endblock all_posts %}
-
-
-
-
-
-
-
+        {% block all_posts %}{% endblock all_posts %}
     </div>
 {% endblock %}
 

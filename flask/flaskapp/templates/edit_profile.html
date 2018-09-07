@@ -1,59 +1,38 @@
 {% extends "all_posts.html" %}
-
 {% block content2 %}
     <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-6">
-
-        <div class="row container">
-            <div class="col-md-3">
-                <img class="col-md-12" src="{{ image_file }}">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <div class="row container">
+                <div class="col-md-3">
+                    <img class="col-md-12" src="{{ image_file }}">
+                </div>
+                <div class="col-md-6">
+                    <h2>{{ current_user.username }}</h2>
+                    <p>{{ current_user.email }}</p>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h2>{{ current_user.username }}</h2>
-                <p>{{ current_user.email }}</p>
-
+            <div class="container" style="padding-top: 30px; padding-bottom: 30px">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <h3>User Info</h3>
+                    <div class="form-group">
+                        {{ form.username.label }}
+                        {{ form.username(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture }}
+                    </div>
+                    <div>
+                        {{ form.submit }}
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="row container">
-
-            {#                <a class="btn btn-info btn-sm mt-1 mb-1" href="{{ url_for('unfollow', user_id=user.id) }}">Edit Profile</a>#}
-        </div>
-
-        <div class="container" style="padding-top: 30px; padding-bottom: 30px">
-            <form method="POST" action="" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-
-                <h3>User Info</h3>
-                <div class="form-group">
-                    {{ form.username.label }}
-
-
-                    {{ form.username(class="form-control") }}
-
-                </div>
-                <div class="form-group">
-                    {{ form.email.label }}
-
-                    {{ form.email(class="form-control") }}
-
-                </div>
-                <div class="form-group">
-                    {{ form.picture.label() }}
-                    {{ form.picture }}
-
-                </div>
-
-                <div>
-                    {{ form.submit }}
-                </div>
-            </form>
-
-
-        </div>
-
-
     </div>
-</div>
 {% endblock %}

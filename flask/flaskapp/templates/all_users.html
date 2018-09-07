@@ -1,22 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
+    <legend class="border-bottom mb-4">{{ legend }}</legend>
     <div class="row">
-
-            {% for user in users %}
-<div class="col-sm-3">
-
-                <div class="card col-sm-10" style="width:400px">
-
-                    <img class="card-img-top col-sm-6" src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
-                    <div class="card-body">
-
-                        <a href="{{ url_for('user', user_id=user.id) }}">{{ user.username }}</a>
+        {% for user in users %}
+            <div class="col-sm-3">
+                <center>
+                    <div class="card" style="width:150px; height: 200px;">
+                        <img class="card-img-top"
+                             src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}">
+                        <div class="card-body">
+                            <a href="{{ url_for('user', user_id=user.id) }}">{{ user.username }}</a>
+                        </div>
                     </div>
-                </div>
- </div>
-            {% endfor %}
-
-
+                </center>
+            </div>
+        {% endfor %}
     </div>
-
 {% endblock %}
